@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+
+
+<script>
+
+ function sumar(sum1, sum2)
+
+{
+
+    let resultado;
+
+    resultado = sum1 + sum2;
+
+    return resultado;
+
+}
+
+alert("4 + 10 = "+ sumar(4, 10) );
+
+/*Mostrar resultado*/
+
+
+function checkTelef(cadena){
+
+  let plant = /[0-9]{3}\s[0-9]{2}\s[0-9]{2}\s[0-9]{2}/g;
+
+  if (plant.test(cadena))
+
+     alert(cadena + "\n Responde a la plantilla.")
+
+  else
+
+     alert(cadena + "\nNo responde a la plantilla.") 
+
+}
+
+function animaTitulo(ini)
+
+{
+
+if (ini){
+
+    document.title = document.title.replaceAll(" ","\xA0")+"-";
+
+   ini = false;
+
+}
+
+ var actual = document.title;
+
+ var ind;
+
+ if(actual[0]=="\xA0")
+
+     ind=2;
+
+ else
+
+   ind=1;
+
+ sp = actual.substring(0, ind);
+
+ document.title = actual.substr(ind)+sp;
+
+ setTimeout(animaTitulo, 220,ini);
+
+ }
+
+</script>
+
+<link rel="stylesheet" href="file:///home/usuario/Escritorio/A.css"/>
+
+</head>
+
+
+<body onload="animaTitulo(true)">
+
+<p>Contenido de la página</p>
+
+<form name="form1" method="post" action="">
+
+ Introduzca su teléfono en el formato 999 99 99 99
+
+ <input type="text" name="email">
+
+ <input type="button" name="Button" value="Comprobar" 
+
+          onclick="checkTelef(this.form.email.value)">
+
+ </form>
+ 
+ 
+
+<div class="botonera"><button>A</button><button>B</button><button>C</button><button>D</button><button>E</button><button>F</button><button>G</button><button>H</button><button>I</button><button>J</button><button>K</button><button>L</button><button>M</button><button>N</button><button>Ñ</button><button>O</button>
+
+<button>P</button><button>Q</button><button>R</button><button>S</button>
+
+<button>T</button><button>U</button><button>V</button><button>W</button>
+
+<button>X</button><button>Y</button><button>Z</button></div>
+
+<div class="panel"></div>
+
+<div class="respuesta">
+
+  <form action="" onsubmit="return verificar()">
+
+    <h2>¡Ya lo se !</h2>
+
+    <textarea id="respuesta" placeholder="Escribe tu respuesta"></textarea><br>
+
+    <input type="submit" name="button" id="button" value=" Comprobar ">
+
+  </form>
+
+</div>
+
+<div class="modal cerrada"><h1>Muy bien: Correcto</h1></div>
+
+</body>
+
+
+
+<script>
+
+
+
+  !function init(){
+
+  const frases=[];
+
+  let elegida = 0, fraseActual;
+
+  let panel, cols, filas;
+
+  const anchoLetra = 65; 
+
+  //anchoLetra es el ancho que tienen los paneles de las letras  (CSS)
+
+  //Frases posibles para acertar, las vocales no llevan acentos
+
+  //No distingue entre mayúsuclas y minúsculas
+
+  frases[0] = "Cuando el viento sopla airado, no hay paz en ningun lado";
+
+  frases[1] = "En abril espigas mil, en mayo espigas y grano";
+
+  frases[2] = "Cuando llueve y hace sol, baila el perro y el pastor";
+
+  elegida = Math.floor(Math.random()*(frases.length))
+
+  fraseActual = frases[elegida];
+
+  //El contenedro del tablero de letras es un div con class panel 
+
+  //Guardo la frase en una propiedad añadida (frase) 
+
+  panel = document.querySelector(".panel");
+
+  panel.frase = fraseActual;
+
+ //numero de columnas para evitar ruptura de palabras
+
+  cols = Math.floor(panel.offsetWidth / anchoLetra);
+
+  filas = wrap(fraseActual, cols); 
+
+
+//Añadir una fila por cada segmento de la frase formateada al panel
+
+  filas.forEach(creaFila, panel) 
+
+
+//Asigna evento a los botones de las letras.
+
+  let botonera = document.querySelector(".botonera");
+
+  botonera.addEventListener('click', seleccionar)
+
+
+//FUNCIONES
+
+  //crea fila con bloques div para las letras
+
+  //usa this para el panel que contiene todas las filas
+
+function creaFila(cadena){
+
+  let fila = document.createElement('div');
+
+  let divLetra;
+
+  fila.classList.add('fila');
+
+  for(let i = 0; i < cadena.length; i++){
+
+  divLetra = document.createElement('div');
+
+  if(cadena[i] == ' '){
+
+  divLetra.classList.add('espacio'); 
+
+  divLetra.innerHTML = "&nbsp;";
+
+  }
+
+  else{
+
+  divLetra.classList.add('letra');
+
+  if( cadena[i].match(/,|\.|;|:|\?|¿|¡|\!/)){
+
+  divLetra.innerHTML = cadena[i]; 
+
+  divLetra.classList.add('espacio', 'visible');
+
+  }
+
+  else{
+
+  divLetra.innerHTML = cadena[i].toUpperCase(); 
+
+  divLetra.classList.add('oculto'); 
+
+  }
+
+  }
+
+  fila.appendChild(divLetra);
+
+  } 
+
+  this.appendChild(fila);
+
+  }
+
+//Parte la frase en secciones para no tener que romper palabras
+
+  //ancho es la anchura máxima del bloque que contendrá la frase
+
+function wrap(frase, ancho){ 
+
+  let filas;
+
+  let palabras = frase.split(' ');
+
+  filas = palabras.reduce((pal, act)=>{ 
+
+  if(pal.length==0){ 
+
+    pal[0] = act
+
+  }
+
+  else{
+
+    if(pal[pal.length-1].length+act.length < ancho){ 
+
+      pal[pal.length-1] += ' '+act;
+
+    }
+
+    else{
+
+      pal.push(act); 
+
+    }
+
+  }
+
+  return pal;
+
+  }, [])
+
+  return filas;
+
+          }
+
+
+//Lógica
+
+function seleccionar(e){
+
+  let tecla = e.target;
+
+  let panel = document.querySelectorAll('.panel .letra');
+
+  if (tecla.tagName.toLowerCase()=="button" && !tecla.classList.contains('usada')){
+
+    tecla.classList.add('usada');
+
+    for(let i = 0; i< panel.length; i++){
+
+      if (panel[i].innerText === tecla.innerText){
+
+        panel[i].classList.replace('oculto', 'visible')
+
+        }
+
+      }
+
+    }
+
+  }
+
+}();
+
+function verificar(){
+
+  let panel = document.querySelector('.panel')
+
+  let respta = event.target.respuesta.value;
+
+  if (respta.toUpperCase() === panel.frase.toUpperCase()){
+
+    document.querySelector('.modal').classList.replace('cerrada', 'abierta');
+
+    let letras = document.querySelectorAll('.letra.oculto');
+
+    for(let i=0; i < letras.length;i++){
+
+      letras[i].classList.replace('oculto','visible')
+
+    }
+
+  }
+
+  else {
+
+    event.target.respuesta.value="¡Fallaste!: pide más letras";
+
+    }
+
+  return false
+
+}
+
+document.addEventListener('click', ()=>document.querySelector('.modal').classList.replace('abierta', 'cerrada'));
+
+</script>
+
+</html>
